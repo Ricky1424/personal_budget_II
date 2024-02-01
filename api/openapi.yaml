@@ -1,0 +1,175 @@
+openapi: 3.0.1
+info:
+  title: Personal Budget II
+  version: 1.0.0
+servers:
+- url: /
+paths:
+  /api/envelopes:
+    summary: GET route to return all envelopes
+    description: This route returns all envelopes in a JSON object format.
+    get:
+      tags:
+      - Get All Envelopes
+      summary: Returns all envelopes
+      description: Returns all envelopes in the format of a JSON object.
+      operationId: get_all_envelopes
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                All envelopes:
+                  value: |-
+                    [
+                        {
+                            "id": 17,
+                            "envelope": "medical",
+                            "budgetamount": 48
+                        },
+                        {
+                            "id": 18,
+                            "envelope": "food",
+                            "budgetamount": 500
+                        },
+                        {
+                            "id": 19,
+                            "envelope": "subscriptions",
+                            "budgetamount": 90
+                        },
+                        {
+                            "id": 20,
+                            "envelope": "social",
+                            "budgetamount": 200
+                        },
+                        {
+                            "id": 21,
+                            "envelope": "rent",
+                            "budgetamount": 1000
+                        },
+                        {
+                            "id": 16,
+                            "envelope": "car",
+                            "budgetamount": 702
+                        },
+                        {
+                            "id": 22,
+                            "envelope": "shoes",
+                            "budgetamount": 1500
+                        }
+                    ]
+      x-swagger-router-controller: GetAllEnvelopes
+  /api/new:
+    summary: POST route that creates a new envelope
+    description: Creates a new envelope. Takes the category and budget amount of the
+      new envelope
+    post:
+      tags:
+      - New Envelope
+      summary: Creates a new envelope
+      description: 'Creates a new envelope. Takes category and budget amount. '
+      operationId: new_envelope
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                New envelope created:
+                  value: Created
+      x-swagger-router-controller: NewEnvelope
+  /api/:envelopeName:
+    summary: GET route which returns an envelope of a given name
+    description: This route returns one specific envelope based on the given parameter
+      name
+    get:
+      tags:
+      - Get Unique Envelope
+      summary: Gets specific envelope
+      description: Returns a specific envelope given a name parameter
+      operationId: get_unique_envelope
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                Unique envelope:
+                  value: |-
+                    {
+                                                "id": 17,
+                                                "envelope": "medical",
+                                                "budgetamount": 48
+                                            }
+      x-swagger-router-controller: GetUniqueEnvelope
+  /api/delete/:envelopeName:
+    summary: DELETE route that removes an envelope
+    description: This deletes an envelope of a given name parameter
+    delete:
+      tags:
+      - Delete Envelope
+      summary: Deletes envelope
+      description: Delete a specific envelope given a name parameter
+      operationId: delete_envelope
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                Deleted:
+                  value: Deleted
+      x-swagger-router-controller: DeleteEnvelope
+  /api/:fromEnvelope/:amount:
+    summary: PUT route that takes an amount away from an envelope
+    description: This route takes a given parameter amount away from the envelope
+      with the given parameter name provided there are enough funds in the account.
+    put:
+      tags:
+      - Subtract Funds
+      summary: Subtract funds
+      description: Subtracts funds from an envelope given a name and amount parameter
+      operationId: subtract_funds
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                Subtracted funds:
+                  value: "PUT: Subtracted 10 from rent"
+      x-swagger-router-controller: SubtractFunds
+  /:fromEnvelope/:toEnvelope/:amount:
+    summary: PUT route that transfers funds from one envelope to another
+    description: Transfers funds of a given parameter from one envelope to another
+      provided there are enough funds.
+    put:
+      tags:
+      - Transfer Funds
+      summary: Transfer funds
+      description: Transfer funds from one envelope to another given two account names
+        and an amount parameter
+      operationId: transfer
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                Transfer:
+                  value: Money transferred
+      x-swagger-router-controller: TransferFunds
+components:
+  schemas:
+    Order:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+        state:
+          type: string
+      xml:
+        name: Order
